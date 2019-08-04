@@ -1,46 +1,46 @@
-(function (factory) {
-    if (typeof define === 'function' && define.amd) {
-        // AMD
-        define(['jquery'], factory);
-    } else if (typeof exports === 'object') {
-        // CommonJS
-        factory(require('jquery'));
-    } else {
-        // Browser globals
-        factory(jQuery);
-    }
-}(function ($) {
-  var CountTo = function (element, options) {
+(function(factory) {
+  if (typeof define === 'function' && define.amd) {
+    // AMD
+    define(['jquery'], factory);
+  } else if (typeof exports === 'object') {
+    // CommonJS
+    factory(require('jquery'));
+  } else {
+    // Browser globals
+    factory(jQuery);
+  }
+}(function($) {
+  var CountTo = function(element, options) {
     this.$element = $(element);
-    this.options  = $.extend({}, CountTo.DEFAULTS, this.dataOptions(), options);
+    this.options = $.extend({}, CountTo.DEFAULTS, this.dataOptions(), options);
     this.init();
   };
 
   CountTo.DEFAULTS = {
-    from: 0,               // the number the element should start at
-    to: 0,                 // the number the element should end at
-    speed: 1000,           // how long it should take to count between the target numbers
-    refreshInterval: 100,  // how often the element should be updated
-    decimals: 0,           // the number of decimal places to show
-    formatter: formatter,  // handler for formatting the value before rendering
-    onUpdate: null,        // callback method for every time the element is updated
-    onComplete: null       // callback method for when the element finishes updating
+    from: 0, // the number the element should start at
+    to: 0, // the number the element should end at
+    speed: 1000, // how long it should take to count between the target numbers
+    refreshInterval: 100, // how often the element should be updated
+    decimals: 0, // the number of decimal places to show
+    formatter: formatter, // handler for formatting the value before rendering
+    onUpdate: null, // callback method for every time the element is updated
+    onComplete: null // callback method for when the element finishes updating
   };
 
-  CountTo.prototype.init = function () {
-    this.value     = this.options.from;
-    this.loops     = Math.ceil(this.options.speed / this.options.refreshInterval);
+  CountTo.prototype.init = function() {
+    this.value = this.options.from;
+    this.loops = Math.ceil(this.options.speed / this.options.refreshInterval);
     this.loopCount = 0;
     this.increment = (this.options.to - this.options.from) / this.loops;
   };
 
-  CountTo.prototype.dataOptions = function () {
+  CountTo.prototype.dataOptions = function() {
     var options = {
-      from:            this.$element.data('from'),
-      to:              this.$element.data('to'),
-      speed:           this.$element.data('speed'),
+      from: this.$element.data('from'),
+      to: this.$element.data('to'),
+      speed: this.$element.data('speed'),
       refreshInterval: this.$element.data('refresh-interval'),
-      decimals:        this.$element.data('decimals')
+      decimals: this.$element.data('decimals')
     };
 
     var keys = Object.keys(options);
@@ -56,7 +56,7 @@
     return options;
   };
 
-  CountTo.prototype.update = function () {
+  CountTo.prototype.update = function() {
     this.value += this.increment;
     this.loopCount++;
 
@@ -76,30 +76,30 @@
     }
   };
 
-  CountTo.prototype.render = function () {
+  CountTo.prototype.render = function() {
     var formattedValue = this.options.formatter.call(this.$element, this.value, this.options);
     this.$element.text(formattedValue);
   };
 
-  CountTo.prototype.restart = function () {
+  CountTo.prototype.restart = function() {
     this.stop();
     this.init();
     this.start();
   };
 
-  CountTo.prototype.start = function () {
+  CountTo.prototype.start = function() {
     this.stop();
     this.render();
     this.interval = setInterval(this.update.bind(this), this.options.refreshInterval);
   };
 
-  CountTo.prototype.stop = function () {
+  CountTo.prototype.stop = function() {
     if (this.interval) {
       clearInterval(this.interval);
     }
   };
 
-  CountTo.prototype.toggle = function () {
+  CountTo.prototype.toggle = function() {
     if (this.interval) {
       this.stop();
     } else {
@@ -111,13 +111,13 @@
     return value.toFixed(options.decimals);
   }
 
-  $.fn.countTo = function (option) {
-    return this.each(function () {
-      var $this   = $(this);
-      var data    = $this.data('countTo');
-      var init    = !data || typeof(option) === 'object';
+  $.fn.countTo = function(option) {
+    return this.each(function() {
+      var $this = $(this);
+      var data = $this.data('countTo');
+      var init = !data || typeof(option) === 'object';
       var options = typeof(option) === 'object' ? option : {};
-      var method  = typeof(option) === 'string' ? option : 'start';
+      var method = typeof(option) === 'string' ? option : 'start';
 
       if (init) {
         if (data) data.stop();
